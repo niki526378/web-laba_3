@@ -23,6 +23,12 @@
                     <label>Синий (B): <input type="number" step="0.1" name="b_factor" value="1.0"></label>
                 </div>
 
+                <div class="form-group" style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" name="use_watermark"> Добавить водяной знак
+                    </label>
+                </div>
+
                 <div class="captcha-box">
                     <label>Капча: Сколько будет <strong>{{ captcha_q }}</strong>?</label>
                     <input type="number" name="captcha_answer" required>
