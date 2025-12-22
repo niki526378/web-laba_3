@@ -4,13 +4,13 @@ import io
 import random
 import numpy as np
 import matplotlib
-matplotlib.use('Agg') # Для работы без GUI на сервере
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from flask import Flask, render_template, request, session
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here' # Нужно для сессий (капча)
+app.secret_key = 'youronin' # Нужно для сессий (капча)
 
 def generate_histogram(image):
     """Создает график распределения цветов и возвращает его как base64 строку"""
@@ -44,18 +44,30 @@ def image_to_base64(image):
     img_io.seek(0)
     return base64.b64encode(img_io.getvalue()).decode('utf-8')
 
-# Функция для классификации (ML)
-def classify_image(image):
-    # Для работы требуется TensorFlow.
-    # model = MobileNetV2(weights='imagenet')
-    # img = image.resize((224, 224))
-    # x = img_to_array(img)
-    # x = np.expand_dims(x, axis=0)
-    # x = preprocess_input(x)
-    # preds = model.predict(x)
-    # return decode_predictions(preds, top=1)[0][0][1]
-    return "ML модуль отключен (экономия памяти)"
+def add_watermark(image, text="Web-Laba 3"):
+    """Накладывает водяной знак с черным фоном и увеличенным текстом"""
+    wm_image = image.copy()
+    draw = ImageDraw.Draw(wm_image)
+    
+    width, height = wm_image.size
+    try:
+        font = ImageFont.truetype("arial.ttf", 40) 
+    except:
+        font = ImageFont.load_default()
 
+    left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+    text_width = right - left
+    text_height = bottom - top
+
+    margin = 20
+    x = width - text_width - margin - 10 
+    y = height - text_height - margin - 10
+
+    rect_coords = [x - 5, y - 5, width - margin + 5, height - margin + 5]
+    draw.rectangle(rect_coords, fill=(0, 0, 0))
+    draw.text((x, y), text, fill=(255, 255, 255), font=font)
+    
+    return wm_image
 @app.route('/', methods=['GET', 'POST'])
 def index():
     error = None
@@ -97,6 +109,8 @@ def index():
                     g_factor = float(request.form.get('g_factor', 1))
                     b_factor = float(request.form.get('b_factor', 1))
 
+                    use_watermark = request.form.get('use_watermark') == 'on'
+
                     # Обработка (изменение интенсивности)
                     # Формула: I_new = I_old * factor
                     r, g, b = image.split()
@@ -105,15 +119,15 @@ def index():
                     b = b.point(lambda i: i * b_factor)
                     processed_image = Image.merge('RGB', (r, g, b))
 
+                    if use_watermark:
+                        processed_image = add_watermark(processed_image)
+
                     # Генерация данных для отображения
                     original_img_data = image_to_base64(image)
                     processed_img_data = image_to_base64(processed_image)
                     
                     orig_hist = generate_histogram(image)
                     proc_hist = generate_histogram(processed_image)
-                    
-                    # ML Классификация (по возможности)
-                    # classification_result = classify_image(processed_image)
 
                 except Exception as e:
                     error = f"Ошибка обработки: {str(e)}"
