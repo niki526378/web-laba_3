@@ -1,10 +1,20 @@
-body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
-.container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-h1, h2 { text-align: center; color: #333; }
-.form-container { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-.result-img { max-width: 100%; height: auto; max-height: 300px; }
-.hist-img { max-width: 100%; height: auto; }
-table td { padding: 10px; text-align: center; vertical-align: top; }
-button { background-color: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-button:hover { background-color: #218838; }
-.error { color: red; font-weight: bold; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
+.container { max-width: 1100px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+h1 { text-align: center; color: #2c3e50; }
+
+.card { background: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #dee2e6; }
+.add-form input { padding: 8px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+th { background: #e9ecef; }
+th a { text-decoration: none; color: #007bff; font-weight: bold; }
+
+input[type="text"], input[type="number"] { width: 90%; padding: 5px; border: 1px solid #eee; }
+
+.btn-add { background: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
+.btn-save { background: #ffc107; border: none; cursor: pointer; padding: 5px 8px; border-radius: 4px; }
+.btn-del { background: #dc3545; color: white; text-decoration: none; padding: 5px 8px; border-radius: 4px; font-size: 12px; }
+
+.stats-grid { display: flex; flex-direction: column; gap: 10px; }
+.stat-item { background: #fff; padding: 10px; border-left: 4px solid #007bff; }
